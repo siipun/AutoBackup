@@ -303,6 +303,48 @@ class BackupDatabase:
                 (project_path,)
             ).fetchall()
 
+        # =========================================================
+    # GET SINGLE SNAPSHOT
+    # =========================================================
+
+    def get_snapshot(
+        self,
+        snapshot_id: str
+    ):
+
+        with self.lock:
+
+            row = self.connection.execute(
+                """
+                SELECT
+                    id,
+                    snapshot_id,
+                    location,
+                    status,
+                    file_count,
+                    total_size
+
+                FROM snapshots
+
+                WHERE snapshot_id = ?
+
+                LIMIT 1
+                """,
+                (snapshot_id,)
+            ).fetchone()
+
+            if row is None:
+                return None
+
+            return {
+                "id": row[0],
+                "snapshot_id": row[1],
+                "location": row[2],
+                "status": row[3],
+                "file_count": row[4],
+                "total_size": row[5]
+            }
+
     # =========================================================
     # TIME
     # =========================================================
@@ -314,7 +356,6 @@ class BackupDatabase:
             timezone.utc
         ).isoformat()
 
-    # =========================================================
     # CLOSE
     # =========================================================
 
