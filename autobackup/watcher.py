@@ -83,11 +83,15 @@ class BackupEventHandler(FileSystemEventHandler):
             self.schedule_snapshot()
 
 
-def start_watching(project_path: Path):
+def start_watching(
+    project_path: Path,
+    database,
+    project_id: int):
 
     snapshot_manager = SnapshotManager(
-        project_path
-    )
+    project_path,
+    database,
+    project_id)
 
     event_handler = BackupEventHandler(
         snapshot_manager
