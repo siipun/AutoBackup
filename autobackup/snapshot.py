@@ -22,7 +22,7 @@ class SnapshotManager:
         self.project_id = project_id
 
         self.backup_root = (
-            self.project_path.parent /
+            self.project_path /
             ".autobackup-storage"
         )
 
